@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chữa Listening, Đề 33</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--n0:#071d33;--n1:#0e3454;--n2:#17527c;--ice:#d6f2ff;--ice2:#9fdcf5;--ice3:#5db8e6;--ok:#6ee787;--bad:#ff8f8f;--gold:#ffe66b}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:'Lexend','Segoe UI',system-ui,sans-serif;color:var(--ice);background:linear-gradient(180deg,var(--n0),var(--n1));display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100vh;height:100dvh;overflow:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(159,220,245,.06) 2px,transparent 2px) 0 0/32px 32px,linear-gradient(90deg,rgba(159,220,245,.06) 2px,transparent 2px) 0 0/32px 32px}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+.pane{background:var(--n1);border:4px solid;border-color:var(--ice3) var(--n0) var(--n0) var(--ice3);box-shadow:0 0 0 4px #04121f}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:10px 18px;position:relative}
+h1{font-weight:800;font-size:clamp(1.1rem,1.9vw,1.9rem);margin-right:auto}
+.trk{display:flex;align-items:center;gap:10px;padding:5px 10px;background:var(--n0);border:3px solid var(--n2);transition:box-shadow .2s,border-color .2s}
+.trk.on{border-color:var(--ice);box-shadow:0 0 16px rgba(159,220,245,.65)}
+.trk span{font-weight:600;font-size:clamp(.8rem,1.1vw,1.05rem);white-space:nowrap}
+.trk audio{height:36px;width:min(26vw,320px)}
+.pick{font-size:.8rem;color:var(--ice2);cursor:pointer;text-decoration:underline}
+.pick input{display:none}
+main{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;padding:10px 22px 12px;min-height:0;position:relative}
+.stage{overflow:auto;padding:clamp(14px,2vw,28px)}
+.hd{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.no{font-weight:800;font-size:clamp(1.6rem,3.2vw,3rem);background:var(--ice);color:var(--n0);padding:0 18px;border:4px solid;border-color:#fff var(--ice3) var(--ice3) #fff}
+.pt{color:var(--ice2);font-size:clamp(.9rem,1.3vw,1.2rem)}
+.ctx{margin-top:14px;color:var(--ice2);font-size:clamp(.9rem,1.35vw,1.3rem)}
+.note7{margin-top:6px;color:var(--gold);font-size:clamp(.85rem,1.2vw,1.15rem)}
+.q{font-weight:600;font-size:clamp(1.3rem,2.5vw,2.6rem);line-height:1.35;margin:10px 0 18px}
+.opts{list-style:none;padding:0;display:grid;gap:12px}
+.opt{display:flex;gap:14px;align-items:flex-start;padding:10px 14px;background:var(--ice);color:var(--n0);font-size:clamp(1.05rem,1.9vw,2rem);line-height:1.35;border:4px solid;border-color:#fff var(--ice3) var(--ice3) #fff;transition:opacity .25s}
+.opt b{background:var(--n0);color:var(--ice);min-width:1.6em;text-align:center;padding:0 .2em}
+.opt.ok{background:var(--ok);border-color:#d4ffdc #2fae52 #2fae52 #d4ffdc;animation:pop .5s steps(5)}
+.opt.dim{opacity:.35}
+@keyframes pop{40%{transform:scale(1.05)}}
+.sent{font-size:clamp(1.3rem,2.5vw,2.6rem);line-height:1.8;margin-top:18px}
+.blank{display:inline-block;min-width:5.5em;border-bottom:4px solid var(--gold);text-align:center;font-weight:800;color:var(--ok);padding:0 .3em}
+.blank.f{animation:pop .5s steps(5)}
+.ans{margin-top:18px;display:grid;gap:10px;font-size:clamp(1rem,1.6vw,1.6rem);line-height:1.5}
+.alt{color:var(--ice2)}
+.hint{padding:10px 14px;background:rgba(255,230,107,.1);border-left:6px solid var(--gold)}
+.tr{margin-top:14px;padding:12px 16px;background:var(--n0);border:3px solid var(--n2);font-size:clamp(.95rem,1.45vw,1.5rem);line-height:1.65}
+.tr p+p{margin-top:6px}
+mark{background:rgba(255,230,107,.22);color:var(--gold);padding:0 .15em;font-weight:600}
+mark.x{background:rgba(255,143,143,.18);color:var(--bad);text-decoration:underline}
+.nt{display:grid;grid-template-rows:auto minmax(0,1fr);min-height:0;overflow:hidden}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 10px;background:var(--n0)}
+.bar .sz{color:var(--ice2);font-size:.95rem;min-width:3.2em;text-align:center}
+.btn{font:600 clamp(.85rem,1.2vw,1.1rem) 'Lexend',sans-serif;padding:6px 14px;background:var(--ice);color:var(--n0);border:3px solid;border-color:#fff var(--ice3) var(--ice3) #fff;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(2px)}
+.btn:focus-visible,.slot:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.btn.red{background:#ff8f8f;border-color:#ffd0d0 #c24d4d #c24d4d #ffd0d0}
+.btn.yel{background:var(--gold);border-color:#fff6bf #c9ad2e #c9ad2e #fff6bf}
+#notes{overflow:auto;padding:16px 20px;background:#f4fcff;color:#0a2338;font-size:28px;line-height:1.5;outline:none}
+#notes:empty::before{content:attr(data-ph);opacity:.4}
+footer{padding:6px 22px 14px;display:grid;gap:8px;position:relative}
+.row{display:flex;gap:10px;align-items:center}
+.hot{display:flex;gap:5px;flex:1}
+.slot{flex:1;max-width:58px;aspect-ratio:1;font:600 clamp(.8rem,1.3vw,1.2rem) 'Lexend',sans-serif;background:var(--n2);color:var(--ice);border:3px solid;border-color:var(--ice3) var(--n0) var(--n0) var(--ice3);cursor:pointer;transition:transform .12s}
+.slot.t2{background:#1d6b8f}
+.slot.seen{background:var(--ice3);color:var(--n0)}
+.slot.cur{border-color:var(--gold);background:var(--ice);color:var(--n0);transform:translateY(-5px)}
+.xp{height:12px;background:var(--n0);border:2px solid var(--n2)}
+.xp i{display:block;height:100%;width:0;background:var(--ok);transition:width .35s steps(6)}
+.keys{color:var(--ice2);font-size:.85rem;text-align:center}
+@media (max-width:900px){body{overflow:auto;height:auto}main{grid-template-columns:1fr}.nt{min-height:60vh}.trk audio{width:44vw}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+
+<header class="pane">
+  <h1>Chữa Listening, Đề 33</h1>
+  <!-- Nếu link audio bị chặn, bấm "Chọn file" để dùng file mp3 đã tải về máy -->
+  <div class="trk" id="trk1"><span>Track 1: câu 1 đến 7</span>
+    <audio id="a1" controls preload="none" src="https://englishpracticetest.net/wp-content/uploads/2022/01/fce-practice-listening-test-33-part-1.mp3"></audio>
+    <label class="pick">Chọn file<input type="file" accept="audio/*" data-a="a1"></label></div>
+  <div class="trk" id="trk2"><span>Track 2: câu 8 đến 17</span>
+    <audio id="a2" controls preload="none" src="https://englishpracticetest.net/wp-content/uploads/2022/01/fce-practice-listening-test-33-part-2.mp3"></audio>
+    <label class="pick">Chọn file<input type="file" accept="audio/*" data-a="a2"></label></div>
+</header>
+
+<main>
+  <section class="pane stage" id="stage" aria-live="polite"></section>
+  <section class="pane nt">
+    <div class="bar">
+      <button class="btn" id="smaller" title="Giảm cỡ chữ">A-</button>
+      <span class="sz" id="sz"></span>
+      <button class="btn" id="bigger" title="Tăng cỡ chữ">A+</button>
+      <button class="btn" data-cmd="bold" title="In đậm"><b>B</b></button>
+      <button class="btn red" data-cmd="foreColor" data-val="#d62828" title="Chữ đỏ">Đỏ</button>
+      <button class="btn yel" data-cmd="hiliteColor" data-val="#ffe66b" title="Tô vàng">Vàng</button>
+      <button class="btn" data-cmd="removeFormat" title="Bỏ định dạng đoạn chọn">Bỏ</button>
+      <button class="btn" id="clear" title="Xóa ghi chú câu này">Xóa</button>
+    </div>
+    <div id="notes" contenteditable="true" spellcheck="false" data-ph="Ghi chú cho câu này..."></div>
+  </section>
+</main>
+
+<footer>
+  <div class="row">
+    <button class="btn" id="prev">Câu trước</button>
+    <div class="hot" id="hot"></div>
+    <button class="btn" id="rev">Đáp án (R)</button>
+    <button class="btn" id="trb">Transcript (T)</button>
+    <button class="btn" id="next">Câu sau</button>
+  </div>
+  <div class="xp"><i id="xp"></i></div>
+  <div class="keys">Phím tắt: mũi tên trái phải để chuyển câu, R hiện đáp án, T hiện transcript, P phát hoặc dừng track của câu này</div>
+</footer>
+
+<script>
+const Q=[
+{t:1,ctx:`You hear two friends talking about a hiking trip.`,q:`What does the man feel confident about regarding the climb?`,o:[`Their physical preparation is sufficient for the summit.`,`They have bought suitable equipment for the trip.`,`The thin air will not slow down their walking pace.`],a:1,
+ hint:`Bẫy A: người nói tiếc là chưa tập đủ. Bẫy C: thin air chỉ làm chậm lại một chút, không phải "không làm chậm".`,
+ tr:[`B: ...there's less oxygen in the air. <mark class="x">It'll slow us down a bit</mark>, that's all.`,`A: I can cope with that. At least we've <mark>invested in decent gear</mark>. We <mark class="x">ought to have done a bit more training</mark>, though.`]},
+{t:1,ctx:`You hear two students talking about maintaining traditions.`,q:`Which view do both speakers share before reaching their final conclusion?`,o:[`Every ancient custom is irrelevant to modern life.`,`Traditions never change as they pass through generations.`,`Customs that harm nature or fairness should not be kept.`],a:2,
+ hint:`Hai người cùng đồng ý trước kết luận cuối. Bẫy A: chỉ nói "a lot of them", không phải "every". Bẫy B: customs do get adapted, nên không phải "never change".`,
+ tr:[`A: ...a lot of them are old-fashioned and they're just not relevant...`,`B: Customs <mark class="x">do get adapted</mark> to suit modern circumstances... Not that I'm saying we should respect <mark>traditions that promote inequality or damage the environment</mark> ...`,`A: ... <mark>which is my precise argument.</mark>`]},
+{t:1,ctx:`You hear two students talking about a philosophy website.`,q:`How has the girl's attitude changed after using it?`,o:[`She is now keen to debate directly with famous scholars online.`,`She has developed a more positive view of online discussion forums.`,`She realizes her tutor's recommendation was overly optimistic.`],a:1,
+ hint:`Bẫy A: cô ấy không dám tranh luận với các tên tuổi lớn. Bẫy C: "hadn't expected much" là kỳ vọng ban đầu, sau đó cô ấy khá ấn tượng.`,
+ tr:[`B: ...<mark class="x">I hadn't expected much from it</mark>... I've never been a great fan of forums... <mark>I must admit this one's changed my mind</mark>... <mark class="x">I wouldn't dare argue with any of their comments</mark>, though!`]},
+{t:1,ctx:`You hear a man talking to his friend about the cookery school she runs.`,q:`Who or what does the woman credit for the success of the technical side of her classes?`,o:[`Her own initial confidence in experimental methods.`,`The newly appointed head of training.`,`The immediate profits from the catering branch.`],a:1,
+ hint:`Bẫy A: ban đầu cô ấy chưa tự tin. Bẫy C: mảng catering chưa sinh lời trong một thời gian.`,
+ tr:[`B: ...<mark class="x">I wasn't enormously confident</mark> about the technical elements before - <mark>if it weren't for our new head of training, I'm not sure that side of things would've taken off.</mark>`,`B: ...<mark class="x">we don't expect to make much money for a while</mark> with that.`]},
+{t:1,ctx:`You hear part of a radio programme about modern zoos.`,q:`According to the zookeeper, how do ordinary visitors contribute to animal welfare?`,o:[`By paying for admission when visiting the zoo.`,`By campaigning for larger roaming spaces in the wild.`,`By volunteering in breeding programs for endangered species.`],a:0,
+ hint:`Bẫy B: "roaming animals need space" là quan điểm chung, không phải việc khách làm. Bẫy C: việc nhân giống do sở thú thực hiện, không phải khách tham quan.`,
+ tr:[`B: ...<mark class="x">roaming animals need space</mark>... <mark class="x">Some species would've died out completely if they hadn't been kept and helped to reproduce.</mark>`,`B: <mark>By buying a ticket to a zoo, the public plays an important role in animal conservation and welfare.</mark>`]},
+{t:1,ctx:`You hear a football coach talking to his team about winning and losing.`,q:`What aspect of the team's behavior pleases the coach?`,o:[`The way they hide their disappointment after a defeat.`,`The number of victories they have achieved this year.`,`Their respectful manner toward opponents when they win.`],a:2,
+ hint:`Bẫy A: "don't let your disappointment show" là lời khuyên, chưa phải điều ông hài lòng (ông chưa thấy họ thua đẹp). Bẫy B: năm nay ít dịp ăn mừng.`,
+ tr:[`...<mark class="x">there's a way to lose gracefully and I haven't seen much evidence of this</mark> from you lately.`,`As far as winning is concerned, I've no criticism... the way you handle it, <mark>congratulating the other side</mark> and none of that leaping about and shouting... be proud of that.`,`<mark class="x">There haven't been many occasions to celebrate so far this year</mark>, but keep positive and <mark class="x">don't let your disappointment show.</mark>`]},
+{t:1,ctx:`You hear two friends discussing a newspaper article about physics.`,note:`Lưu ý: câu này ứng với tình huống thứ 8 trong băng. Tình huống 7 (sự kiện thể thao) bỏ qua.`,q:`What is the man's current attitude toward physics after reading the article?`,o:[`He still does not particularly like the subject itself.`,`He now grasps most of the complex physical laws discussed.`,`He plans to study the subject further on his own.`],a:0,
+ hint:`Bẫy B: "I didn't get half of what the article was saying". Bẫy C: bài báo làm anh ấy thấy mình làm được mọi thứ, không phải kế hoạch học thêm.`,
+ tr:[`A: ...<mark class="x">I didn't get half of what the article was saying.</mark> No, it was his passion for teaching the subject. <mark class="x">It made me think I could do anything if I put my mind to it.</mark>`,`A: <mark>I'm still not keen on physics itself</mark>, but I wish he'd been my teacher!`]},
+{t:2,s:`On his first project, Thomas found it too demanding to restore an old {} while working his regular job.`,a:`four-poster bed`,alt:`four-poster`,
+ hint:`regular job = day job. too demanding = a bit too much to take on.`,
+ tr:[`...trying to restore a beautiful old <mark>four-poster bed</mark> while doing my <mark class="x">day job</mark> was a bit too much to take on.`]},
+{t:2,s:`Apart from deep carvings in the wood, Thomas notes that fixing {} can also take a great deal of time.`,a:`rusty metal legs`,alt:`metal legs / rusty legs`,
+ hint:`deep carvings = decorations cut deeply into the wood. take a great deal of time = take ages. Chỉ ghi "legs" là thiếu thông tin.`,
+ tr:[`I spent days cleaning up the decorations - these were cut deeply into the wood. Sorting out things like <mark>rusty metal legs</mark> can take ages, too.`]},
+{t:2,s:`Checking scraped marks on the wood can help restorers identify the specific {} the furniture came from.`,a:`workshop`,alt:``,
+ hint:`scraped marks = anything scraped into the wood. came from = originated from.`,
+ tr:[`...anything scraped into the wood that might identify whose <mark>workshop</mark> it originated from.`]},
+{t:2,s:`Before dismantling a piece of furniture, Thomas advises taking a {} of it from every angle.`,a:`photo`,alt:`photograph / picture`,
+ hint:`dismantling = take it apart. Đừng nhầm với "label": việc gắn nhãn là bước sau.`,
+ tr:[`<mark>Take a photo</mark> of it from every angle before you take it apart... And don't forget to attach a label to the individual pieces.`]},
+{t:2,s:`Beginners who want to research restoration beforehand could borrow a {} from a local library.`,a:`DVD`,alt:``,
+ hint:`beforehand = in advance. Bẫy: manual dùng lúc đang phục chế, không phải mượn ở thư viện.`,
+ tr:[`Why not <mark>borrow a DVD from the library</mark> to do a bit of research in advance? And <mark class="x">keep a manual to hand during the restoration process</mark>...`]},
+{t:2,s:`Certain substances found in {} can damage the skin if protective clothing is not worn.`,a:`wood-strippers`,alt:`wood-stripper / chemicals`,
+ hint:`damage the skin = harmful to the skin. Điền wood-strippers là khớp nhất với "found in".`,
+ tr:[`Wear protective clothing, as some of the materials you'll be working with - such as <mark>chemicals used in wood-strippers</mark> - can be harmful to the skin.`]},
+{t:2,s:`To remove built-up dirt from larger surfaces, Thomas recommends scrubbing them with a {}.`,a:`cloth or sponge`,alt:`cloth / sponge`,
+ hint:`built-up dirt = build-up of dirt. Bẫy: toothbrush dùng cho chi tiết nhỏ, không phải bề mặt lớn.`,
+ tr:[`Give larger surfaces a scrub with something like <mark>a cloth or sponge</mark> to remove the build-up of dirt. <mark class="x">To get into any finely-detailed areas I use a toothbrush.</mark>`]},
+{t:2,s:`If you cannot find a matching replacement part in antique shops, you may have to ask an expert to produce a {}.`,a:`substitute`,alt:``,
+ hint:`produce = make. Bẫy: "handle" là món ông tìm thấy ở tiệm đồ cổ, không phải đồ chuyên gia làm.`,
+ tr:[`It's always worth looking in antique shops - <mark class="x">I found a handle that was identical</mark>... Otherwise, you might need an expert to <mark>make a substitute</mark>.`]},
+{t:2,s:`Thomas warns that rushing the removal of the final coat may force you to do extra {} later on.`,a:`repair work`,alt:``,
+ hint:`final coat = finish. extra = more. Cụm cần đủ cả "repair work".`,
+ tr:[`The final coat on a piece is called a finish... Old finishes can be 'stubborn'... <mark>Be patient and don't rush</mark> - you might end up having to do <mark>more repair work</mark> otherwise.`]},
+{t:2,s:`For the final stage of work, restorers should buy {} to protect their hands from harsh chemicals.`,a:`plastic gloves`,alt:`gloves`,
+ hint:`final stage = finishing work. protect their hands = so the chemicals don't cause problems for your skin. Bẫy: sandpaper, wood glue, screwdriver, rubber hammer.`,
+ tr:[`Get some <mark class="x">rough sandpaper, wood glue, and a screwdriver</mark>... Work with a <mark class="x">rubber hammer</mark>... and invest in some <mark>plastic gloves</mark> for the finishing work, too, so the chemicals don't cause problems for your skin.`]}
+];
+
+const $=s=>document.querySelector(s);
+const stage=$('#stage'),notes=$('#notes'),hot=$('#hot');
+const A=[$('#a1'),$('#a2')],T=[$('#trk1'),$('#trk2')];
+let i=0,shown=false,trOn=false,seen=new Set([0]),size=28;
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* hotbar */
+Q.forEach((q,k)=>{const b=document.createElement('button');b.className='slot'+(q.t===2?' t2':'');b.textContent=k+1;b.setAttribute('aria-label','Câu '+(k+1));b.onclick=()=>go(k);hot.appendChild(b)});
+
+function render(){
+  const q=Q[i],n=i+1;
+  const part=q.t===1?'Track 1, trắc nghiệm':'Track 2, điền từ';
+  let h=`<div class="hd"><div class="no">Câu ${n}</div><div class="pt">${part}</div></div>`;
+  if(q.t===1){
+    h+=`<p class="ctx">${q.ctx}</p>`+(q.note?`<p class="note7">${q.note}</p>`:'')+`<p class="q">${q.q}</p><ul class="opts">`+
+       q.o.map((t,k)=>`<li class="opt ${shown?(k===q.a?'ok':'dim'):''}"><b>${'ABC'[k]}</b><span>${t}</span></li>`).join('')+`</ul>`;
+  }else{
+    h+=`<p class="sent">${q.s.replace('{}',`<span class="blank ${shown?'f':''}">${shown?q.a:''}</span>`)}</p>`;
+  }
+  if(shown){
+    h+=`<div class="ans">`+(q.t===2&&q.alt?`<div class="alt">Cũng chấp nhận: ${q.alt}</div>`:'')+(q.hint?`<div class="hint">${q.hint}</div>`:'')+`</div>`;
+  }
+  if(trOn){h+=`<div class="tr">${q.tr.map(p=>`<p>${p}</p>`).join('')}</div>`}
+  stage.innerHTML=h;stage.scrollTop=0;
+  [...hot.children].forEach((b,k)=>{b.classList.toggle('cur',k===i);b.classList.toggle('seen',seen.has(k)&&k!==i)});
+  $('#xp').style.width=((i+1)/Q.length*100)+'%';
+  T[0].classList.toggle('on',q.t===1);T[1].classList.toggle('on',q.t===2);
+  $('#rev').textContent=shown?'Ẩn đáp án (R)':'Đáp án (R)';
+  $('#trb').textContent=trOn?'Ẩn transcript (T)':'Transcript (T)';
+}
+function saveNotes(){ls.set('l33n'+i,notes.innerHTML)}
+function go(k){
+  if(k<0||k>=Q.length)return;
+  saveNotes();i=k;shown=false;trOn=false;seen.add(k);
+  notes.innerHTML=ls.get('l33n'+i)||'';
+  render();
+}
+function reveal(){
+  shown=!shown;render();
+  if(shown){const el=stage.querySelector('.opt.ok,.blank');if(el){const r=el.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2)}}
+}
+function toggleTr(){trOn=!trOn;render();if(trOn)stage.scrollTop=stage.scrollHeight}
+function playCur(){const a=A[Q[i].t-1];a.paused?a.play():a.pause()}
+
+$('#prev').onclick=()=>go(i-1);$('#next').onclick=()=>go(i+1);
+$('#rev').onclick=reveal;$('#trb').onclick=toggleTr;
+addEventListener('keydown',e=>{
+  const t=e.target;if(t.isContentEditable||t.tagName==='AUDIO'||t.tagName==='INPUT')return;
+  const k=e.key;
+  if(k==='ArrowRight'||k==='PageDown')go(i+1);
+  else if(k==='ArrowLeft'||k==='PageUp')go(i-1);
+  else if(k==='r'||k==='R')reveal();
+  else if(k==='t'||k==='T')toggleTr();
+  else if(k==='p'||k==='P')playCur();
+});
+
+/* audio: chỉ một track phát tại một thời điểm, chọn file dự phòng */
+A.forEach((a,k)=>a.addEventListener('play',()=>A[1-k].pause()));
+document.querySelectorAll('.pick input').forEach(inp=>inp.onchange=()=>{const f=inp.files[0];if(f){const a=$('#'+inp.dataset.a);a.src=URL.createObjectURL(f);a.play()}});
+
+/* ghi chú */
+notes.addEventListener('input',saveNotes);
+notes.addEventListener('focus',()=>{try{document.execCommand('styleWithCSS',false,true)}catch(e){}});
+document.querySelectorAll('[data-cmd]').forEach(b=>{
+  b.addEventListener('mousedown',e=>{e.preventDefault();notes.focus();document.execCommand(b.dataset.cmd,false,b.dataset.val||null);saveNotes()});
+});
+function setSize(s){size=Math.max(16,Math.min(80,s));notes.style.fontSize=size+'px';$('#sz').textContent=size+'px';ls.set('l33size',size)}
+$('#smaller').onclick=()=>setSize(size-4);$('#bigger').onclick=()=>setSize(size+4);
+$('#clear').onclick=()=>{if(confirm('Xóa ghi chú của câu này?')){notes.innerHTML='';saveNotes()}};
+setSize(parseInt(ls.get('l33size'))||28);
+
+/* hiệu ứng tuyết và pixel */
+const cv=$('#fx'),cx=cv.getContext('2d');let W,H,P=[];
+function fit(){W=cv.width=innerWidth;H=cv.height=innerHeight}addEventListener('resize',fit);fit();
+const snow=Array.from({length:reduce?0:26},()=>({x:Math.random()*W,y:Math.random()*H,s:3+(Math.random()*4|0),v:.3+Math.random()*.7,d:Math.random()*6}));
+function tick(t){
+  cx.clearRect(0,0,W,H);cx.globalAlpha=.5;cx.fillStyle='#fff';
+  for(const f of snow){f.y+=f.v;f.x+=Math.sin(t/900+f.d)*.4;if(f.y>H){f.y=-8;f.x=Math.random()*W}cx.fillRect(f.x|0,f.y|0,f.s,f.s)}
+  P=P.filter(p=>p.l>0);
+  for(const p of P){p.x+=p.vx;p.y+=p.vy;p.vy+=.28;p.l--;cx.globalAlpha=Math.min(1,p.l/20);cx.fillStyle=p.c;cx.fillRect(p.x|0,p.y|0,p.s,p.s)}
+  cx.globalAlpha=1;requestAnimationFrame(tick);
+}
+function burst(x,y){if(reduce)return;const c=['#6ee787','#ffffff','#9fdcf5','#ffe66b'];for(let n=0;n<44;n++)P.push({x,y,vx:(Math.random()-.5)*11,vy:-Math.random()*9-2,s:4+(Math.random()*6|0),l:50+Math.random()*30,c:c[n%4]})}
+requestAnimationFrame(tick);
+
+notes.innerHTML=ls.get('l33n0')||'';
+render();
+</script>
+</body>
+</html>
